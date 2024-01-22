@@ -10,7 +10,7 @@ public class ParserInPDDL {
     //basato sul PDDL Parser in Python <https://github.com/pucrs-automated-planning/pddl-parser>.
     private static final Domain domain = new Domain();
     private static final Problem problem = new Problem();
-        Domain parseDomain(String filename) throws IOException {
+        public Domain parseDomain(String filename) throws IOException {
             BufferedReader reader = new BufferedReader(new FileReader(filename));
 
             String line;

@@ -28,7 +28,7 @@ public class ParserOutPDDL{
 
     private static void writeHeader(BufferedWriter writer, String problemName) throws IOException {
         writer.write("(define (problem " + problemName + ")\n");
-        writer.write("\t(domain "+domain+")\n");
+        writer.write("\t(:domain "+domain+")\n");
     }
 
     private static void writeObjectsSection(BufferedWriter writer, ArrayList<ObjectPDDL> objects) throws IOException {
@@ -94,7 +94,7 @@ public class ParserOutPDDL{
 
         private static void writeActionsSection(BufferedWriter writer, ArrayList<Action> actions) throws IOException {
             for (Action action : actions) {
-                writer.write("\n"+ action.phrase() + "\n");
+                writer.write("\t \n"+ action.phrase() + "\n");
             }
         }
 
