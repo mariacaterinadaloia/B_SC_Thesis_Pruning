@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class ParserOutPDDL{
     private static String domain;
-    ParserOutPDDL(String domain){
+    public ParserOutPDDL(String domain){
         ParserOutPDDL.domain = domain;
     }
     public static void writeProblemFile(String fileName, Problem problem) {

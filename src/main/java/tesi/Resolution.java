@@ -15,7 +15,7 @@ public class Resolution<T extends tesi.Properties, V extends ObjectModel, U exte
     private Properties p;
     private ArrayList<U> functions;
 
-    Resolution(IntermediateModel<U,V,T> model){
+    public Resolution(IntermediateModel<U, V, T> model){
         this.properties = model.getProperties();
         this.objects = model.getObjects();
         this.init = model.getInitialState();
