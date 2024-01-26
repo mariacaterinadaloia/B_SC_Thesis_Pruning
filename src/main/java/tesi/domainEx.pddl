@@ -44,31 +44,6 @@
             )
         )
 
-        (:action esempio1
-            :parameters (?r - studente ?s - professore ?t - esame)
-                    :precondition
-                    (and
-                        (not (ha_superato ?r ?t))
-                    )
-                    :effect
-                    (and
-                        (ha_superato ?r ?t)
-                    )
-        )
-
-        (:action esempio2
-                    :parameters (?r - studente ?s - professore ?t - esame)
-                            :precondition
-                            (and
-                                (ha_superato ?r ?t)
-                            )
-                            :effect
-                            (and
-                                (not(ha_superato ?r ?t))
-                            )
-                )
-
-
         (:action esempio3
                             :parameters (?r - studente ?s - professore ?t - esame)
                                     :precondition
@@ -81,15 +56,5 @@
                                     )
                         )
 
-        (:action esempi4
-                    :parameters (?r - studente ?s - professore ?t - esame)
-                            :precondition
-                            (and
-                                (not (ha_superato ?r ?t))
-                            )
-                            :effect
-                            (and
-                                (ha_superato ?r ?t)
-                            )
-                )
+
 )

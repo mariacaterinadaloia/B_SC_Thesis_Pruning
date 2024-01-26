@@ -4,16 +4,24 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class Function<T extends tesi.Properties, V extends ObjectModel> {
+    private ArrayList<String> parameters;
     private String name;
     private ArrayList<Fact<T,V>> predicates;
     private ArrayList<Fact<T,V>> effects;
 
-    public Function(String name, ArrayList<Fact<T,V>> predicates, ArrayList<Fact<T,V>> effects){
+    public Function(String name, ArrayList<Fact<T,V>> predicates, ArrayList<Fact<T,V>> effects,  ArrayList<String> parameters){
         this.name = name;
         this.predicates = predicates;
         this.effects = effects;
+        this.parameters=parameters;
+    }
+    public ArrayList<String> getParameters() {
+        return parameters;
     }
 
+    public void setParameters(ArrayList<String> parameters) {
+        this.parameters = parameters;
+    }
     public String getName() {
         return name;
     }

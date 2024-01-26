@@ -3,21 +3,13 @@ package tesi;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class Action extends Function<Predicate, ObjectPDDL>{
+public class Action extends Function<Predicate, ObjectPDDL> {
     private ArrayList<String> parameters;
 
     Action(String name, ArrayList<Fact<Predicate, ObjectPDDL>> predicates, ArrayList<Fact<Predicate, ObjectPDDL>> effects, ArrayList<String> parameters){
-        super(name, predicates, effects);
-        this.parameters=parameters;
+        super(name, predicates, effects, parameters);
     }
 
-    public ArrayList<String> getParameters() {
-        return parameters;
-    }
-
-    public void setParameters(ArrayList<String> parameters) {
-        this.parameters = parameters;
-    }
 
     public String phrase(){
         return "(:action " +super.getName()+ "\n \t\t :parameters "+ getParametersString() +" \n \t\t" + " :precondition "+
@@ -40,7 +32,7 @@ public class Action extends Function<Predicate, ObjectPDDL>{
 
     public String getParametersString(){
         String s = "";
-        for(String tmp : parameters)
+        for(String tmp : super.getParameters())
             s += tmp+"\n";
         return s;
     }
@@ -53,4 +45,5 @@ public class Action extends Function<Predicate, ObjectPDDL>{
         Action action = (Action) o;
         return Objects.equals(parameters, action.parameters);
     }
+
 }

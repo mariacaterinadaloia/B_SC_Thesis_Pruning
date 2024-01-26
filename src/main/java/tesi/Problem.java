@@ -5,6 +5,16 @@ import java.util.ArrayList;
 public class Problem {
     private String name;
     private ArrayList<ObjectPDDL> objects;
+
+    public ArrayList<ObjectPDDL> getObjects2() {
+        return objects2;
+    }
+
+    public void setObjects2(ArrayList<ObjectPDDL> objects2) {
+        this.objects2 = objects2;
+    }
+
+    private ArrayList<ObjectPDDL> objects2;
     private ArrayList<Fact<Predicate,ObjectPDDL>> initialState;
     private ArrayList<Fact<Predicate,ObjectPDDL>> goalState;
 

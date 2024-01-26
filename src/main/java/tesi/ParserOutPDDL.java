@@ -34,6 +34,7 @@ public class ParserOutPDDL{
     private static void writeObjectsSection(BufferedWriter writer, ArrayList<ObjectPDDL> objects) throws IOException {
         writer.write("  (:objects\n");
         for (ObjectPDDL object : objects) {
+            String s = object.phrase();
             writer.write("    " + object.phrase() + "\n");
         }
         writer.write("  )\n");
@@ -48,11 +49,11 @@ public class ParserOutPDDL{
     }
 
     private static void writeGoalStateSection(BufferedWriter writer, ArrayList<Fact<Predicate,ObjectPDDL>> goalState) throws IOException {
-        writer.write("  (:goal\n");
+        writer.write("  (:goal\n \t (and");
         for (Fact<Predicate,ObjectPDDL> fact : goalState) {
             writer.write("    " + fact.phrase() + "\n");
         }
-        writer.write("  )\n");
+        writer.write("  ))\n");
     }
 
     public static void writeDomainFile(String fileName, Domain domain) {
@@ -60,7 +61,7 @@ public class ParserOutPDDL{
             if((f= new File(fileName)).exists())
                 f.delete();
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
-                writedomainHeader(writer, domain.getName());
+                writedomainHeader(writer, domain.getName(), domain);
                 writeTypesSection(writer, domain.getTypes());
                 writePredicatesSection(writer, domain.getPredicates());
                 writeActionsSection(writer, domain.getActions());
@@ -70,8 +71,13 @@ public class ParserOutPDDL{
             }
         }
 
-        private static void writedomainHeader(BufferedWriter writer, String domainName) throws IOException {
+        private static void writedomainHeader(BufferedWriter writer, String domainName, Domain domain) throws IOException {
+            StringBuilder r = new StringBuilder();
             writer.write("(define (domain " + domainName + ")\n");
+            for(String s : domain.getRequirements()){
+                r.append(s).append(" ");
+            }
+            writer.write("\t(:requirements " + r +")\n");
         }
 
         private static void writeTypesSection(BufferedWriter writer, ArrayList<Type> types) throws IOException {

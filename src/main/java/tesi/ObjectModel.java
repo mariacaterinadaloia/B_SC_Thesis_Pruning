@@ -29,12 +29,10 @@ public class ObjectModel {
 
     public String phrase(){
         if(type.getName().equals("object"))
-            return "";
+            return name;
         else if(!type.getSuperclass().equals("object"))
             return name + " - " + type.getName();
-        else
-            return name;
-
+        return name;
     }
 
     @Override

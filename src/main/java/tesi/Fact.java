@@ -8,6 +8,7 @@ public class Fact<T extends tesi.Properties, V extends ObjectModel> {
     private ArrayList<Coppia<Integer, V>>pos;
     private T properties;
     private boolean negate;
+    private ArrayList<V> objects;
 
     public boolean isNegate() {
         return negate;
@@ -25,11 +26,12 @@ public class Fact<T extends tesi.Properties, V extends ObjectModel> {
         this.complete = complete;
     }
 
-    public Fact(String complete, T properties, ArrayList<Coppia<Integer, V>>pos, boolean negate){
+    public Fact(String complete, T properties, ArrayList<Coppia<Integer, V>>pos, boolean negate, ArrayList<V> objects){
         this.pos = pos;
         this.properties = properties;
         this.negate = negate;
         this.complete = complete;
+        this.objects = objects;
     }
 
     public T getProperties() {
@@ -54,6 +56,14 @@ public class Fact<T extends tesi.Properties, V extends ObjectModel> {
         if (o == null || getClass() != o.getClass()) return false;
         Fact<T,V> fact = (Fact<T,V>) o;
         return negate == fact.negate && Objects.equals(pos, fact.pos) && Objects.equals(properties, fact.properties);
+    }
+
+    public ArrayList<V> getObjects() {
+        return objects;
+    }
+
+    public void setObjects(ArrayList<V> objects) {
+        this.objects = objects;
     }
 
     public String phrase(){

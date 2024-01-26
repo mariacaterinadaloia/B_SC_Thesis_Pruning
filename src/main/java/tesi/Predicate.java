@@ -12,4 +12,5 @@ public class Predicate extends Properties{
         s += getComplete();
         return s;
     }
+
 }

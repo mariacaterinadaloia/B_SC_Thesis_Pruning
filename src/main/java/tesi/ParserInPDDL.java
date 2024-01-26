@@ -16,7 +16,8 @@ public class ParserInPDDL {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.contains("(define (domain")) {
-                    domain.setName(line.split(" ")[2].replace(")",""));
+                    domain.setName(line.trim().split(" ")[2].replace(")",""));
+
                     parseFileDomain(filename);
                 }
             }
@@ -75,8 +76,8 @@ public class ParserInPDDL {
                 if (line.contains("(:predicates")) {
                     while (null != (line = br.readLine())){
                         if(line.contains("(")&&line.contains(")")) {
-                            String[] parts = line.split("\\s+");
-                            String predicateName = parts[0]; // Assuming the predicate name is the second element
+                            String[] parts = line.trim().split("\\s+");
+                            String predicateName = parts[0].replaceAll("[()]", ""); // Assuming the predicate name is the second element
                             int numParameters = 1;
                             ArrayList<String> parameters = new ArrayList<>();
 //aggiungi il break da qualche parte
@@ -96,7 +97,6 @@ public class ParserInPDDL {
 
                 assert line != null;
                 if(line.contains("(:action")) {
-
                     //Parse actions
                     String actionName = line.replace("(:action","").trim() ;
                     ArrayList<String> parameters = new ArrayList<>();
@@ -122,7 +122,7 @@ public class ParserInPDDL {
                             if ((line.contains(":precondition"))) {
 
                                 do{
-                                    if (line.contains("and"))
+                                    if (line.trim().equals("(and"))
                                         continue;
                                     else if (line.contains(")") && line.contains("("))
                                         precondition.add(parseFacts(line));
@@ -134,10 +134,9 @@ public class ParserInPDDL {
                             }
 
                             // Read effects
-                            assert line != null;
-                            if ((line.contains(":effect") && br.readLine() != null)) {
+                            if ((line != null && line.contains(":effect"))) {
                                 do {
-                                    if (line.contains("and"))
+                                    if (line.trim().equals("(and"))
                                         continue;
                                     else if (line.contains(")") && line.contains("("))
                                         effect.add(parseFacts(line));
@@ -147,7 +146,7 @@ public class ParserInPDDL {
                                 }while ((line = br.readLine()) != null);
                             }
                         }
-                        if(line==null||(line.trim().equals(")")&&!effect.isEmpty()&&!precondition.isEmpty()&&!parameters.isEmpty())) break;
+                        if(line==null||((line.trim().equals(")")&&!effect.isEmpty()&&!precondition.isEmpty()&&!parameters.isEmpty()))) break;
                     }while((line=br.readLine())!=null);
                     //String name, ArrayList<Fact> predicates, ArrayList<Fact> effects, ArrayList<String> parameters
 
@@ -159,17 +158,8 @@ public class ParserInPDDL {
                 //parse costants
 
                 if (line!=null&&line.contains("(:constants")) {
-                    List<String> objects = new ArrayList<>();
-                    while((line = br.readLine())!=null){
-                        if (line.contains(")")) {
-                            line=line.replace(")", "");
-                            if(!line.trim().isEmpty())
-                                domain.getCostants().add(line.trim());
-                            break;
-                        }else
-                            domain.getCostants().add(line.trim());
-                    }
-                    domain.setCostants((ArrayList<String>) objects);
+                    List<ObjectPDDL> objects = parseList(br);
+                    domain.setCostants((ArrayList<ObjectPDDL>) objects);
                 }
 
 
@@ -193,6 +183,8 @@ public class ParserInPDDL {
                 if (line.contains("(:objects")) {
                         List<ObjectPDDL> objects = parseList(br);
                         problem.setObjects((ArrayList<ObjectPDDL>) objects);
+                        problem.setObjects2((ArrayList<ObjectPDDL>) objects);
+                        problem.getObjects2().addAll(domain.getCostants());
                 }
 
                 // Parse initial state
@@ -213,6 +205,9 @@ public class ParserInPDDL {
                     ArrayList<Fact<Predicate,ObjectPDDL>> goalState=new ArrayList<>();
                     do {
                         if(line.contains("(")&&line.contains(")")) {
+                            if(line.contains("and")){
+                                line = line.replace("and", "");
+                            }
                             goalState.add(parseFacts(line));
                         }else if(line.contains(")")) break;
                     }while ((line = br.readLine())!= null);
@@ -254,6 +249,9 @@ public class ParserInPDDL {
                     for(String s : names){
                         list.add(new ObjectPDDL(s, type));
                     }
+                }else{
+                    String name = line.trim();
+                    list.add(new ObjectPDDL(name, type));
                 }
             }
         }
@@ -266,6 +264,7 @@ public class ParserInPDDL {
         ArrayList<Coppia<Integer, ObjectPDDL>> pos = new ArrayList<>();
         Predicate predicate = null;
         ObjectPDDL object = null;
+        ArrayList<ObjectPDDL> objectPDDLS = new ArrayList<>();
 
         // Rimuovi parentesi e suddividi la stringa in sottostringhe separate da spazi
         if(input.contains("not")){
@@ -277,15 +276,17 @@ public class ParserInPDDL {
         complete = complete.replaceAll("[()]", "");
         complete = "("+complete+")";
         String[] tokens = input.replaceAll("[()]", "").trim().split("\\s+");
-        String predicateName=tokens[0].trim();
+        String predicateName=tokens[0].trim().replaceAll("[()]", "");
         int numero = 1;
 
         for (int i = 1; i < tokens.length; i ++) {
             String stringa = tokens[i];
 
             for(ObjectPDDL obj : problem.getObjects()){
-                if(stringa.contains(obj.getName()))
+                if(stringa.contains(obj.getName())) {
                     object = obj;
+                    objectPDDLS.add(obj);
+                }
             }
 
             Coppia<Integer, ObjectPDDL> coppia = new Coppia<>(numero, object);
@@ -294,12 +295,22 @@ public class ParserInPDDL {
             numero++;
 
             for(Predicate pred : domain.getPredicates()){
-                if(pred.getComplete().contains(predicateName))
+                if(pred.getComplete().contains(predicateName.trim())) {
                     predicate = pred;
+                    break;
+                }
             }
-
         }
-        fact = new Fact<Predicate,ObjectPDDL>(complete, predicate, pos, negate);
+
+        if(numero==1){
+            for(Predicate pred : domain.getPredicates()){
+                if(pred.getComplete().contains(predicateName.trim())) {
+                    predicate = pred;
+                    break;
+                }
+            }
+        }
+        fact = new Fact<Predicate,ObjectPDDL>(complete, predicate, pos, negate, objectPDDLS);
         return fact;
     }
 }

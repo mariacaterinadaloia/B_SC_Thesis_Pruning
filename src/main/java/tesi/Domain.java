@@ -8,7 +8,7 @@ public class Domain {
         private ArrayList<Action> actions = new ArrayList<Action>();
         private ArrayList<Predicate> predicates = new ArrayList<Predicate>();
         private ArrayList<Type> types = new ArrayList<Type>();
-        private ArrayList<String> costants = new ArrayList<String>();
+        private ArrayList<ObjectPDDL> costants = new ArrayList<>();
 
         public String getName() {
             return name;
@@ -19,11 +19,11 @@ public class Domain {
         }
 
 
-        public ArrayList<String> getCostants() {
+        public ArrayList<ObjectPDDL> getCostants() {
                 return costants;
         }
 
-        public void setCostants(ArrayList<String> costants) {
+        public void setCostants(ArrayList<ObjectPDDL> costants) {
                 this.costants = costants;
         }
 

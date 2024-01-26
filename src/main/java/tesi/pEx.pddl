@@ -7,12 +7,10 @@
     )
 
     (:init
-        (and
         (not(ha_superato sica POO))
         (not(ha_superato monetti POO))
         (detiene genovese POO)
         (not(bocciato sica POO))
-        )
     )
 
     (:goal 
