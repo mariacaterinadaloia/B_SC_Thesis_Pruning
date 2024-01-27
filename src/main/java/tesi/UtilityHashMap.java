@@ -17,7 +17,7 @@ public class UtilityHashMap<T extends tesi.Properties, V extends ObjectModel> {
                 is = false;
             for(Coppia<Integer, V> c : fact.getPos()){
                 for (V obj : objs) {
-                    if(c.getC2().equals(obj)) {
+                    if(c.getC2()!=null && c.getC2().equals(obj)) {
                         if ((a = hm.get(new Coppia<T, V>(properties, obj)))!=null){
                             if(a.equals(new Coppia<Integer, Boolean>(c.getC1(), is)))
                                 continue;
