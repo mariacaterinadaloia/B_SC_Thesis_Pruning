@@ -14,10 +14,10 @@ public class MainSenzaGUI {
             domainFile = args[0];
             problemFile = args[1];
         } else {
-            domainFile = "C:\\Users\\maria\\Desktop\\esempi\\esempio3\\domainAgricola.pddl";
-                    //"src/test/java/test/domain.pddl";
-            problemFile = "C:\\Users\\maria\\Desktop\\esempi\\esempio3\\p01.pddl";
-                    //"src/test/java/test/problem.pddl";
+            domainFile = //"C:\\Users\\maria\\Desktop\\esempi\\esempio3\\domainAgricola.pddl";
+                    "src/test/java/test/domain.pddl";
+            problemFile = //"C:\\Users\\maria\\Desktop\\esempi\\esempio3\\p01.pddl";
+                    "src/test/java/test/problem.pddl";
         }
 
         try {
