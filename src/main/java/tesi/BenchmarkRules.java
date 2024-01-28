@@ -1,14 +1,15 @@
-package test;
+package tesi;
 import org.openjdk.jmh.annotations.*;
-import tesi.*;
+import org.openjdk.jmh.profile.GCProfiler;
+import org.openjdk.jmh.runner.Runner;
+import org.openjdk.jmh.runner.options.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 @State(Scope.Benchmark)
-@Warmup(iterations = 10, time = 1, timeUnit = TimeUnit.SECONDS)
-@Measurement(iterations = 20, time = 1, timeUnit = TimeUnit.SECONDS)
+@Warmup(iterations = 1, time = 1, timeUnit = TimeUnit.SECONDS)
+@Measurement(iterations = 1, time = 1, timeUnit = TimeUnit.SECONDS)
 public class BenchmarkRules{
     String domainFile = "domain.pddl";
     String problemFile = "problem.pddl";
@@ -25,6 +26,19 @@ public class BenchmarkRules{
         ParserOutPDDL parserOut = new ParserOutPDDL(domain.getName());
         ParserOutPDDL.writeProblemFile("finalProblem.pddl", problem);
         ParserOutPDDL.writeDomainFile("finalDomain.pddl", domain);
+    }
+
+    public static void main(String[] args) {
+        Options opt = new OptionsBuilder()
+                .include(BenchmarkRules.class.getSimpleName())
+                .addProfiler(GCProfiler.class).forks(1)
+                .build();
+
+        try {
+            new Runner(opt).run();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
